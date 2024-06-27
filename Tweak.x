@@ -66,6 +66,20 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
     PSSpecifier *settings = [PSSpecifier preferenceSpecifierNamed:name target:self set:nil get:@selector(getBatteryServiceSuggestion:) detail:%c(BatteryHealthUIController) cell:PSLinkListCell edit:nil];
     [specifiers addObject:group];
     [specifiers addObject:settings];
+    // Gọi phương thức để loại bỏ specifier linh kiện không xác định
+    specifiers = [self removeUnknownPartHistorySpecifiers:specifiers];
+    return specifiers;
+}
+
+// Phương thức loại bỏ dòng pin linh kiện không xác định
+- (NSMutableArray <PSSpecifier *> *)removeUnknownPartHistorySpecifiers:(NSMutableArray <PSSpecifier *> *)specifiers {
+    for (PSSpecifier *specifier in [specifiers copy]) {
+        NSString *specifierID = [specifier propertyForKey:PSSpecifierIDKey];
+        // Thay thế "UNKNOWN_PART_HISTORY_ID" bằng specifierID thực tế
+        if ([specifierID isEqualToString:@"UNKNOWN_PART_HISTORY_ID"]) {
+            [specifiers removeObject:specifier];
+        }
+    }
     return specifiers;
 }
 
