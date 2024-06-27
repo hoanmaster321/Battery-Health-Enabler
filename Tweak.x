@@ -1,9 +1,14 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Preferences/PSSpecifier.h>
+#import <Preferences/PSViewController.h>
+#import <UIKit/UIKit.h>
 
 @interface BatteryUIResourceClass : NSObject
 + (bool)inDemoMode;
 + (NSString *)containerPath;
+@end
+
+@interface BatteryHealthUIController : PSViewController
 @end
 
 extern CFPropertyListRef _CFPreferencesCopyValueWithContainer(CFStringRef key, CFStringRef applicationID, CFStringRef userName, CFStringRef hostName, CFStringRef containerPath);
