@@ -80,7 +80,14 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
     // [specifier setProperty:@NO forKey:PSEnabledKey];
     return specifiers;
 }
-
+- (void)viewDidLoad {
+    %orig;
+    // Loại bỏ "Important Battery Message"
+    UIView *batteryHealthHeader = [self valueForKey:@"_batteryHealthHeaderView"];
+    if (batteryHealthHeader) {
+        batteryHealthHeader.hidden = YES;
+    }
+}
 %end
 
 %end
