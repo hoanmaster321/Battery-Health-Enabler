@@ -14,6 +14,26 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
 
 %group Hooks
 
+%hook PLBatteryUIBackendModel
+
++ (bool)supportsChargingFixedLimit {
+    return false;
+}
+
++ (bool)shouldShowChargingController {
+    return true;
+}
+
+%end
+
+%hook PLModelingUtilities
+
++ (bool)isPhone {
+    return true;
+}
+
+%end
+
 %hook BatteryUIResourceClass
 
 // iPhone's is 4
@@ -55,9 +75,9 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
 
 - (NSMutableArray <PSSpecifier *> *)smartChargingGroupSpecifier {
     NSMutableArray <PSSpecifier *> *specifiers = %orig;
-    PSSpecifier *specifier = [specifiers lastObject];
-    // You can't toggle Optimized Battery Charging on non-iPhone anyway
-    [specifier setProperty:@NO forKey:PSEnabledKey];
+    // Bỏ dòng dưới đây để không thay đổi thuộc tính PSEnabledKey
+    // PSSpecifier *specifier = [specifiers lastObject];
+    // [specifier setProperty:@NO forKey:PSEnabledKey];
     return specifiers;
 }
 
