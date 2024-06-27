@@ -1,14 +1,12 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Preferences/PSSpecifier.h>
-#import <Preferences/PSViewController.h>
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <Preferences/PSListController.h>
+
 
 @interface BatteryUIResourceClass : NSObject
 + (bool)inDemoMode;
 + (NSString *)containerPath;
-@end
-
-@interface BatteryHealthUIController : PSViewController
 @end
 
 extern CFPropertyListRef _CFPreferencesCopyValueWithContainer(CFStringRef key, CFStringRef applicationID, CFStringRef userName, CFStringRef hostName, CFStringRef containerPath);
@@ -35,6 +33,23 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
 
 + (bool)isPhone {
     return true;
+}
+
+%end
+
+%hook PSUIPrefsRootController
+
+- (NSMutableArray *)specifiers {
+    NSMutableArray *specs = %orig;
+    
+    for (PSSpecifier *spec in [specs copy]) {
+        if ([spec.identifier isEqualToString:@"BATTERY_HEALTH_IMPORTANT_MESSAGE"]) {
+            [specs removeObject:spec];
+            break;
+        }
+    }
+    
+    return specs;
 }
 
 %end
@@ -85,14 +100,7 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
     // [specifier setProperty:@NO forKey:PSEnabledKey];
     return specifiers;
 }
-- (void)viewDidLoad {
-    %orig;
-    // Loại bỏ "Important Battery Message"
-    UIView *batteryHealthHeader = [self valueForKey:@"_batteryHealthHeaderView"];
-    if (batteryHealthHeader) {
-        batteryHealthHeader.hidden = YES;
-    }
-}
+
 %end
 
 %end
