@@ -51,12 +51,6 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
     return 0;
 }
 
-+ (int)getChargeCycles {
-    // Giả sử số lần sạc được lưu trong UserDefaults với key "BatteryChargeCycles"
-    // Bạn có thể thay thế bằng cách lấy số liệu thực tế từ hệ thống nếu có
-    return [[[NSUserDefaults standardUserDefaults] objectForKey:@"BatteryChargeCycles"] intValue];
-}
-
 %end
 
 %hook BatteryUIController
@@ -72,13 +66,6 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
     PSSpecifier *settings = [PSSpecifier preferenceSpecifierNamed:name target:self set:nil get:@selector(getBatteryServiceSuggestion:) detail:%c(BatteryHealthUIController) cell:PSLinkListCell edit:nil];
     [specifiers addObject:group];
     [specifiers addObject:settings];
-
-    // Thêm phần tử hiển thị số lần sạc
-    PSSpecifier *cycleCountSpecifier = [PSSpecifier preferenceSpecifierNamed:BatteryUILocalization(BUIR, @"CHARGE_CYCLES") target:self set:nil get:@selector(getChargeCycles) detail:nil cell:PSStaticTextCell edit:nil];
-    [cycleCountSpecifier setProperty:@YES forKey:PSEnabledKey];
-    [cycleCountSpecifier setProperty:[NSString stringWithFormat:@"%d", [BUIR getChargeCycles]] forKey:PSDefaultValueKey];
-    [specifiers addObject:cycleCountSpecifier];
-
     return specifiers;
 }
 
