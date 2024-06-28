@@ -1,8 +1,5 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Preferences/PSSpecifier.h>
-#import <Foundation/Foundation.h>
-#import <Preferences/PSListController.h>
-
 
 @interface BatteryUIResourceClass : NSObject
 + (bool)inDemoMode;
@@ -33,23 +30,6 @@ static NSString *BatteryUILocalization(Class BUIR, NSString *key) {
 
 + (bool)isPhone {
     return true;
-}
-
-%end
-
-%hook PSUIPrefsRootController
-
-- (NSMutableArray *)specifiers {
-    NSMutableArray *specs = %orig;
-    
-    for (PSSpecifier *spec in [specs copy]) {
-        if ([spec.identifier isEqualToString:@"BATTERY_HEALTH_IMPORTANT_MESSAGE"]) {
-            [specs removeObject:spec];
-            break;
-        }
-    }
-    
-    return specs;
 }
 
 %end
