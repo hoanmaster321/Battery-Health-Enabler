@@ -16,7 +16,7 @@ jobs:
           # Thiết lập môi trường Xcode phiên bản 13.2 trên macOS 12
             
       - uses: actions/checkout@main
-        # Checkout mã nguồn của repository chính
+        # Checkout mã nguồn ok của repository chính
 
       - name: Checkout theos/theos
         uses: actions/checkout@main
